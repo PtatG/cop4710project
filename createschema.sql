@@ -8,16 +8,10 @@ create table users (
 	city varchar(100) default null
 );
 
-create table admins (
-	id int,
-	primary key (id),
-	foreign key (id) references users(id)
-);
-
 create table superadmins (
 	int id,
 	primary key (id),
-	foreign key (id) references admins(id)
+	foreign key (id) references users(id)
 );
 
 create table events (
@@ -33,8 +27,7 @@ create table events (
 	state varchar(20) default null,
 	zipcode varchar(10) default null,
 	organizer int not null,
-	foreign key (organizer) references admins(id),
-	approved bit default false,
+	foreign key (organizer) references users(id),
 	active bit default false
 );
 
