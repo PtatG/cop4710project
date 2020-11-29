@@ -9,7 +9,7 @@ create table users (
 );
 
 create table superadmins (
-	int id,
+	id int,
 	primary key (id),
 	foreign key (id) references users(id)
 );
