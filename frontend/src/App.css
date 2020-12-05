@@ -1,13 +1,230 @@
-body {
-	text-align: center
-}
-
-a {
-	text-decoration: none;
-	color: black
-}
-
 .container {
-	margin-top: 5rem;
-	text-align: center
+  margin: 0 auto;
+  width: 500px;
+  display: inline-block;
+  justify-content: space-around;
+}
+
+.homeContainer {
+	margin: 0 auto;
+	margin-top: 10%;
+	font-size:  2rem;
+	text-shadow: -0.5px  0.5px 0 #fff,
+				  0.5px  0.5px 0 #fff,
+				  0.5px -0.5px 0 #fff,
+				 -0.5px -0.5px 0 #fff;
+	width: 100%;
+	display: inline-block;
+}
+
+.outerContainer {
+	margin: 0 auto;
+	width: 100%;
+	justify-content: space-around;
+}
+
+.homePage {
+	height: 90vh;
+	width: 99vw;
+	position: absolute;
+	top: 10vh;
+}
+
+.registerPage {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 10vh;
+}
+
+.resetButton {
+	color: #424242;
+	background-color: transparent;
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-size: 1rem;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.registerButton {
+	color: #424242;
+	background-color: transparent;
+	border: 2px solid;
+	border-color: #424242;
+	border-radius: 5px;
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-size: 3rem;
+	margin: 0.5em;
+	padding: 0.2em 0.5em;
+	padding-bottom: 0.3em;
+}
+
+.registerButton2 {
+	color: #424242;
+	background-color: #E5E5E5;
+	border: 2px solid;
+	border-color: #424242;
+	border-radius: 5px;
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-size: 2rem;
+	margin: 0.5em;
+	padding: 0.2em 0.5em;
+	padding-bottom: 0.3em;
+}
+
+.userPage {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 10vh;
+}
+
+.nav-links {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding-top: 0.5em;
+	padding-left: 0;
+	margin-left: 0;
+}
+
+.navClass {
+	background-image: url("main.png");
+	background-repeat: repeat;
+	background-size: 1700px;
+}
+
+.resultsTable {
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-weight: 300;
+	font-size: 1rem;
+	letter-spacing: 0.02em;
+	background-color: white;
+	border: 2px solid;
+	border-color: #424242;
+	border-radius: 50px;
+	align-items: center;
+	position: center;
+	margin-left: 3em;
+}
+
+.errorReturn {
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-weight: 300;
+	font-size: 1rem;
+	letter-spacing: 0.02em;
+	color: red;
+	margin: 0 auto;
+	padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  background-size: cover;
+  height: 100vh;
+  font-family: Ubuntu, Verdana, Geneva, sans-serif;
+  color: #424242;
+  text-align: center;
+}
+
+h1 {
+  font-weight: 300;
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0;
+}
+
+h2 {
+	font-weight: 300;
+	font-size: 2rem;
+	letter-spacing: 0.02em;
+	margin-bottom: 1.35em;
+}
+
+h3 {
+	font-weight: 300;
+	font-size: 5rem;
+	letter-spacing: 0.02em;
+	text-shadow: -0.5px  0.5px 0 #fff,
+				  0.5px  0.5px 0 #fff,
+				  0.5px -0.5px 0 #fff,
+				 -0.5px -0.5px 0 #fff;
+}
+
+h4 {
+	font-weight: 300;
+	font-size: 4rem;
+	letter-spacing: 0.02em;
+	margin-bottom: 0;
+	text-shadow: -0.5px  0.5px 0 #fff,
+				  0.5px  0.5px 0 #fff,
+				  0.5px -0.5px 0 #fff,
+				 -0.5px -0.5px 0 #fff;
+}
+
+h5 {
+	font-weight: 300;
+	font-size: 3rem;
+	letter-spacing: 0.02em;
+	margin-bottom: 0;
+	text-shadow: -0.5px  0.5px 0 #fff,
+				  0.5px  0.5px 0 #fff,
+				  0.5px -0.5px 0 #fff,
+				 -0.5px -0.5px 0 #fff;
+}
+
+nav {
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+	align-items: center;
+	min-height: 0vh;
+}
+
+li {
+	display: inline-block;
+	color: black;
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-size: 2rem;
+	font-weight: 300;
+	letter-spacing: 0.02em;
+	padding: 0.5em;
+	padding-top: 0em;
+}
+
+input {
+  width: 75%;
+  background-color: #F3F3F3;
+  font-family: Ubuntu, Verdana, Geneva, sans-serif;
+  font-size: 1.5rem;
+  padding: 0.25em;
+  margin-top: 0.5em;
+  border: 2px solid;
+  border-color: #424242;
+  border-radius: 5px;
+}
+
+button {
+	color: gray;
+	background-color: #F3F3F3;
+	border: none;
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
+	font-size: 2rem;
+	margin: 0.5em;
+	padding: 0.2em 0.5em;
+}
+
+textarea {
+	background: black;
+	color: white;
+	width: 100%;
+	font-size: 1.5rem;
+	padding: 0.25em;
+	margin-top: 0.5em;
+	border: 3px solid black;
+	height: 300px;
+	width: 500px;
 }
