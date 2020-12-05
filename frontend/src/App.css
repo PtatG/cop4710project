@@ -5,6 +5,24 @@
   justify-content: space-around;
 }
 
+.collapsable {
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: center;
+	outline: none;
+}
+
+.active, .collapsible:hover {
+	background-color: #eee;
+}
+
+.content {
+	padding: 0 18px;
+	overflow: hidden;
+}
+
 .homeContainer {
 	margin: 0 auto;
 	margin-top: 10%;
@@ -218,13 +236,13 @@ button {
 }
 
 textarea {
-	background: black;
-	color: white;
-	width: 100%;
+	width: 75%;
+	background-color: #F3F3F3;
+	font-family: Ubuntu, Verdana, Geneva, sans-serif;
 	font-size: 1.5rem;
 	padding: 0.25em;
 	margin-top: 0.5em;
-	border: 3px solid black;
-	height: 300px;
-	width: 500px;
+	border: 2px solid;
+	border-color: #424242;
+	border-radius: 5px;
 }
