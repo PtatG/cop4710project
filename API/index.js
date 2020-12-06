@@ -8,6 +8,12 @@ const port = 3000;
 
 // parse json requests
 app.use(bodyParser.json());
+// CORS policy fix
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get("/", (req, res) => {
 	res.json({message: "COP4710 Project: Exhibition Center Event Website"});
