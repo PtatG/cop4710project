@@ -5,12 +5,12 @@ import {BrowserRouter, Switch, Route} from "react-router-dom";
 import './App.css';
 
 import App from './App';
-import Nav from './Nav';
-import Lookup from './Lookup';
-import Host from './Host';
-import Search from './Search';
-import Login from './Login';
-import Register from './Register';
+import Nav from './components/Nav';
+import Lookup from './components/Lookup';
+import Host from './components/Host';
+import Search from './components/Search';
+import Login from './components/Login';
+import Register from './components/Register';
 
 import reportWebVitals from './reportWebVitals';
 
