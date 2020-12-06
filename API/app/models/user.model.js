@@ -3,6 +3,7 @@
 // purpose: COP4710 Database Project
 const sql = require("./db.js");
 
+// User constructor
 const User = function(users) {
 	this.username = users.username;
 	this.password = users.password;

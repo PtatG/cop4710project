@@ -118,7 +118,5 @@ exports.loginUser = (req, res) => {
 				});
 			});
 		});
-
-
 	});
 }; // end loginUser

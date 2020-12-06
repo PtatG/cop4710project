@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 	res.json({message: "COP4710 Project: Exhibition Center Event Website"});
 });
 
-require("./app/routes/user.routes.js")(app);
+require("./app/routes/routes.js")(app);
 
 app.listen(port, () => {
 	console.log("Server is running on port %d.", port);
