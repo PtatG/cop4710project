@@ -4,9 +4,20 @@
 module.exports = app => {
 	const users = require("../controllers/user.controller.js");
 
-	// register a new user
 	app.post("/registerUser", users.registerUser);
 
-	// login user
 	app.post("/loginUser", users.loginUser);
+
+	// app.put("/editUser", users.editUser);
+
+	// app.post("/deleteUser", users.deleteUser);
+
+	// app.post("/listAdmins", users.listAdmins);
+
+
+
+
+
+
+
 };

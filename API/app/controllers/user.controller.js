@@ -76,14 +76,49 @@ exports.loginUser = (req, res) => {
 
 		let payload = {userId: data.id,};
 		let token = jwt.sign(payload);
+		let id = data.id;
+		let username = data.username;
+		let name = data.name;
+		let email = data.email;
+		let city = data.city;
 
-		res.json({
-			token: token,
-			username: data.username,
-			name: data.name,
-			email: data.email,
-			city: data.city,
-			message: "User " + data.username + " login successful."
+		// level 0 is user, 1 is admin, 2 is superadmin
+		User.superCheck(id, (err, data) => {
+			if (!err) {
+				return res.json({
+					token: token,
+					username: username,
+					name: name,
+					email: email,
+					city: city,
+					level: 2,
+					message: "User " + username + " login successful."
+				});
+			}
+			User.adminCheck(id, (err, data) => {
+				if (err) {
+					return res.json({
+						token: token,
+						username: username,
+						name: name,
+						email: email,
+						city: city,
+						level: 0,
+						message: "User " + username + " login successful."
+					});
+				}
+				res.json({
+					token: token,
+					username: username,
+					name: name,
+					email: email,
+					city: city,
+					level: 1,
+					message: "User " + username + " login successful."
+				});
+			});
 		});
+
+
 	});
 }; // end loginUser

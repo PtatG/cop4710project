@@ -32,4 +32,28 @@ User.loginUser = (currentUser, result) => {
 	});
 };
 
+User.superCheck = (id, result) => {
+	sql.query(`SELECT id FROM superadmins WHERE id = '${id}'`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res[0]);
+		}
+		return result({err: "Not superadmin."}, null);
+	});
+};
+
+User.adminCheck = (id, result) => {
+	sql.query(`SELECT organizer FROM events WHERE organizer = '${id}'`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res[0]);
+		}
+		return result({err: "Not admin."}, null);
+	});
+};
+
 module.exports = User;
