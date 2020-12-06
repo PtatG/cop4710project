@@ -28,6 +28,21 @@ export default class Register extends React.Component {
 	submitForm(e) {
 		console.log("Submitting...");
 		console.log(this.state.formdata)
+		
+		var jsonPayload = '{"username" : "' + this.state.formdata.registeruser + '", "password" : "' + this.state.formdata.registerpassword + '", "city" : "' + this.state.formdata.registercity + '", "email" : "' + this.state.formdata.registeremail + '"}';
+		fetch('http://127.0.0.1:3000/registerUser', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: jsonPayload,
+		}).then(res => {
+			console.log(res)
+			return res.json()
+		}).then(response => {
+			console.log(response)
+		});
+		
 		e.preventDefault();
 	}
 	

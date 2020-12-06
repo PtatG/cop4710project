@@ -1,3 +1,4 @@
+import './App.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {render} from "react-dom";
@@ -15,6 +16,7 @@ import Register from './components/Register';
 import reportWebVitals from './reportWebVitals';
 
 function Index() {
+	componentDidMount();
 	return (
 		<BrowserRouter>
 			<div className="outerContainer">
@@ -28,6 +30,21 @@ function Index() {
 			</div>
 		</BrowserRouter>
 	);
+}
+
+function componentDidMount() {
+	fetch('http://127.0.0.1:3000/', {
+		method: 'GET',
+		headers: {
+			'Content-type': 'application/json',
+			'Accept': 'application/json'
+		}
+	}).then(res => {
+		console.log(res)
+		return res.json()
+	}).then(response => {
+		console.log(response)
+	})
 }
 
 ReactDOM.render(
