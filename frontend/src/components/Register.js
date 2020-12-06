@@ -1,30 +1,85 @@
-import React, {useState} from 'react';
-import {connect} from 'react-redux';
+import React from "react";
+import {Link} from 'react-router-dom';
 
-const submitName = (name) => ({
-		type: "TEST",
-		text: name,
-});
-
-function Register(props) {
-	const [name, setName] = useState("");
-	return (
-		<div>
-			<p>Register</p>
-			<form onSubmit={(e) => {
-				e.preventDefault();
-				props.submitName(name);
-			}}>
-				<input name="name" onChange={(e) => setName(e.target.value)} value={name} />
-				<input type="submit" />
-			</form>
-			<p>{props.text}</p>
-		</div>
-	);
+export default class Register extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			formdata: {
+				registeremail: "",
+				registeruser: "",
+				registercity: "",
+				registerpassword: ""
+			}
+		}
+		this.changeForm = this.changeForm.bind(this);
+		this.submitForm = this.submitForm.bind(this);
+	}
+	
+	changeForm(e) {
+		this.setState(state => ({
+			formdata: {
+				...state.formdata,
+				[e.target.name]: e.target.value
+			}
+		}))
+	}
+	
+	submitForm(e) {
+		console.log("Submitting...");
+		console.log(this.state.formdata)
+		e.preventDefault();
+	}
+	
+	render() {
+		const {formdata} = this.state;
+		return (
+			<div className="registerPage">
+				<div className="container">
+					<h4>Register</h4>
+					<form onSubmit={this.submitForm}>
+						<input
+						id="registeremail"
+						name="registeremail"
+						autoComplete="off"
+						placeholder="Your email address"
+						onChange={this.changeForm}
+						value={formdata.registeremail}
+						/>
+						<input
+						id="registeruser"
+						name="registeruser"
+						autoComplete="off"
+						placeholder="Your username"
+						onChange={this.changeForm}
+						value={formdata.registeruser}
+						/>
+						<input
+						id="registercity"
+						name="registercity"
+						autoComplete="off"
+						placeholder="Your city"
+						onChange={this.changeForm}
+						value={formdata.registercity}
+						/>
+						<input
+						id="registerpassword"
+						name="registerpassword"
+						type="password"
+						placeholder="Choose a safe password"
+						onChange={this.changeForm}
+						value={formdata.registerpassword}
+						/>
+						<div>
+							<button
+							className="registerButton2"
+							type="submit">
+								Create Account
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		)
+	}
 }
-
-const mapState = (state) => ({
-	text: state.text
-})
-
-export default connect(mapState, {submitName})(Register);

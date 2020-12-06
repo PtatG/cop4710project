@@ -1,8 +1,10 @@
 .container {
   margin: 0 auto;
   width: 500px;
-  display: inline-block;
+  /*display: inline-block;*/
   justify-content: space-around;
+  position: relative;
+  top: 1rem
 }
 
 .collapsable {
@@ -49,7 +51,6 @@
 }
 
 .registerPage {
-	height: 100vh;
 	width: 100vw;
 	position: absolute;
 	top: 10vh;
@@ -91,10 +92,8 @@
 }
 
 .userPage {
-	height: 100vh;
 	width: 100vw;
 	position: absolute;
-	top: 10vh;
 }
 
 .nav-links {
@@ -111,6 +110,8 @@
 	background-image: url("main.png");
 	background-repeat: repeat;
 	background-size: 1700px;
+	position: absolute;
+	z-index: 1
 }
 
 .resultsTable {
