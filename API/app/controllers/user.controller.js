@@ -33,6 +33,11 @@ exports.registerUser = (req, res) => {
 
 	User.registerUser(user, (err, data) => {
 		if (err) {
+			if(err.code == 'ER_DUP_ENTRY') {
+				return res.status(500).json({
+					message: "Error: Username already in use."
+				})
+			}
 			return res.status(500).json({
 				message: "Error: Could not register user."
 			});
