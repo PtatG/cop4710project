@@ -17,12 +17,33 @@ const Event = function(events) {
 	this.active = events.active;
 };
 
+Event.approveEvent = (id, result) => {
+	sql.query(`UPDATE events SET active = 1 WHERE eventid = '${id}'`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		return result(null, {res: "Set active."});
+	});
+};
+
 Event.createEvent = (newEvent, result) => {
 	sql.query("INSERT INTO events SET ?", newEvent, (err, res) => {
 		if (err) {
 			return result(err, null);
 		}
 		return result(null, {title: res.title, ...newEvent});
+	});
+};
+
+Event.listSelfEvents = (id, result) => {
+	sql.query(`SELECT * FROM events WHERE organizer = '${id}'`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res);
+		}
+		return result({err: "Event not found."}, null);
 	});
 };
 

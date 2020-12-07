@@ -23,14 +23,14 @@ module.exports = app => {
 
 	// app.post("/userEvents", super.userEvents);
 
-	// app.put("/approveEvent", super.approveEvent);
+	app.put("/approveEvent", events.approveEvent);
 
 	app.post("/createEvent", events.createEvent);
 
 	// not required
 	// app.put("/editEvent", events.editEvent);
 
-	// app.post("/listSelfEvents", events.listSelfEvents);
+	app.post("/listSelfEvents", events.listSelfEvents);
 
 	app.get("/eventsByDate", events.eventsByDate);
 

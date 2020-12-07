@@ -51,7 +51,7 @@ exports.registerUser = (req, res) => {
 
 // login user
 // required inputs: username and password
-// outputs: token, username, email, name, city, and message
+// outputs: token, username, email, name, city, level, and message
 exports.loginUser = (req, res) => {
 	// check required fields
 	if (!req.body.username) {
