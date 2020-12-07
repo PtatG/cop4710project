@@ -33,11 +33,6 @@ exports.registerUser = (req, res) => {
 
 	User.registerUser(user, (err, data) => {
 		if (err) {
-			if(err.code == 'ER_DUP_ENTRY') {
-				return res.status(500).json({
-					message: "Error: Username already in use."
-				})
-			}
 			return res.status(500).json({
 				message: "Error: Could not register user."
 			});
@@ -51,7 +46,7 @@ exports.registerUser = (req, res) => {
 
 // login user
 // required inputs: username and password
-// outputs: token, username, email, name, city, level, and message
+// outputs: token, username, email, name, city, and message
 exports.loginUser = (req, res) => {
 	// check required fields
 	if (!req.body.username) {
@@ -79,9 +74,6 @@ exports.loginUser = (req, res) => {
 			});
 		}
 
-		// token expires after 24 hours
-		let payload = {userId: data.id,};
-		let token = jwt.sign(payload);
 		let id = data.id;
 		let username = data.username;
 		let name = data.name;
@@ -91,35 +83,44 @@ exports.loginUser = (req, res) => {
 		// level 0 is user, 1 is admin, 2 is superadmin
 		User.superCheck(id, (err, data) => {
 			if (!err) {
+				// create token, token expires after 24 hours
+				let payload = {userId: id, level: 2};
+				let token = jwt.sign(payload);
+
 				return res.json({
 					token: token,
 					username: username,
 					name: name,
 					email: email,
 					city: city,
-					level: 2,
 					message: "User " + username + " login successful."
 				});
 			}
 			User.adminCheck(id, (err, data) => {
 				if (err) {
+					// create token
+					let payload = {userId: id, level: 0};
+					let token = jwt.sign(payload);
+
 					return res.json({
 						token: token,
 						username: username,
 						name: name,
 						email: email,
 						city: city,
-						level: 0,
 						message: "User " + username + " login successful."
 					});
 				}
+				// create token
+				let payload = {userId: id, level: 1};
+				let token = jwt.sign(payload);
+
 				res.json({
 					token: token,
 					username: username,
 					name: name,
 					email: email,
 					city: city,
-					level: 1,
 					message: "User " + username + " login successful."
 				});
 			});

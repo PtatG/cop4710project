@@ -3,6 +3,7 @@
 // purpose: COP4710 Database Project
 const sql = require("./db.js");
 
+// Event constructor
 const Event = function(events) {
 	this.title = events.title;
 	this.description = events.description;

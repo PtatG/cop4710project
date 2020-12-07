@@ -12,16 +12,17 @@ module.exports = app => {
 	// not required
 	// app.put("/editUser", users.editUser);
 
-	// not required
+	// not required, shouldn't implement otherwise we will need
+	// triggers in the db to delete from other tables
 	// app.post("/deleteUser", users.deleteUser);
 
-	// app.post("/listAdmins", super.listAdmins);
+	// app.post("/listAdmins", events.listAdmins);
 
-	// app.post("/adminEvents", super.adminEvents);
+	// app.post("/adminEvents", events.adminEvents);
 
-	// app.post("/listUsers", super.listUsers);
+	// app.post("/listUsers", events.listUsers);
 
-	// app.post("/userEvents", super.userEvents);
+	// app.post("/userEvents", events.userEvents);
 
 	app.put("/approveEvent", events.approveEvent);
 

@@ -6,7 +6,7 @@ const Participant = require("../models/participant.model.js");
 const jwt = require("../jwt/jwtFunction.js");
 
 // approve an event
-// required input: token, eventid, and level
+// required input: token and eventid
 // output: message
 exports.approveEvent = (req, res) => {
 	// check required fields
@@ -20,28 +20,26 @@ exports.approveEvent = (req, res) => {
 			message: "Event ID required."
 		});
 	}
-	if (!req.body.level) {
-		return res.status(400).json({
-			message: "User level required."
-		});
-	}
-	if (req.body.level != 2) {
-		return res.status(401).json({
-			message: "User needs to be a Super Admin to approve events."
-		});
-	}
 
 	let token, userId;
   if (jwt.verify(req.body.token)) {
-    // decode jwt, then store user ID
+    // decode jwt, then store user ID and level
     token = jwt.decode(req.body.token);
     userId = token.payload.userId;
+		level = token.payload.level;
   }
   else {
     return res.status(401).json({
       message: "Token couldn't be verified."
     });
   }
+
+	// check user permission level
+	if (level != 2) {
+		return res.status(401).json({
+			message: "User needs to be a Super Admin to approve events."
+		});
+	}
 
 	Event.approveEvent(req.body.eventid, (err, data) => {
 		if (err) {
@@ -73,15 +71,23 @@ exports.createEvent = (req, res) => {
 
 	let token, userId;
   if (jwt.verify(req.body.token)) {
-    // decode jwt, then store user ID
+    // decode jwt, then store user ID and level
     token = jwt.decode(req.body.token);
     userId = token.payload.userId;
+		level = token.payload.level;
   }
   else {
     return res.status(401).json({
-      message: "Token could not be verified."
+      message: "Token couldn't be verified."
     });
   }
+
+	// change user's permission level
+	if (level == 0) {
+		level = 1;
+	}
+	let payload = {userId: userId, level: level};
+	let newToken = jwt.sign(payload);
 
 	const events = new Event({
 		title: req.body.title,
@@ -104,6 +110,7 @@ exports.createEvent = (req, res) => {
 			});
 		}
 		res.json({
+			token: newToken,
 			eventid: data.eventid,
 			title: data.title,
 			message: "Created event " + data.title + " successfully!"
@@ -112,7 +119,7 @@ exports.createEvent = (req, res) => {
 }; // end createEvent
 
 // list all events this admin has created
-// required input: token and level
+// required input: token
 // output: events array and message
 exports.listSelfEvents = (req, res) => {
 	// check required fields
@@ -121,28 +128,26 @@ exports.listSelfEvents = (req, res) => {
 			message: "Token required."
 		});
 	}
-	if (!req.body.level) {
-		return res.status(400).json({
-			message: "User level required."
-		});
-	}
-	if (req.body.level == 0) {
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID and level
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+		level = token.payload.level;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token couldn't be verified."
+    });
+  }
+
+	// check user permission level
+	if (level == 0) {
 		return res.status(401).json({
 			message: "This user has not created any events."
 		});
 	}
-
-	let token, userId;
-  if (jwt.verify(req.body.token)) {
-    // decode jwt, then store user ID
-    token = jwt.decode(req.body.token);
-    userId = token.payload.userId;
-  }
-  else {
-    return res.status(401).json({
-      message: "Token could not be verified."
-    });
-  }
 
 	Event.listSelfEvents(userId, (err, data) => {
 		if (err) {

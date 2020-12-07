@@ -23,7 +23,7 @@ module.exports = {
   verify: (token) => {
     let verifyOptions = {
       issuer: "COP4710 Project",
-      expiresIn: "1h",
+      expiresIn: "24h",
       algorithm: ["RS256"]
     };
     try {
