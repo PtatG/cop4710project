@@ -25,7 +25,7 @@ module.exports = app => {
 
 	// app.put("/approveEvent", super.approveEvent);
 
-	// app.post("/createEvent", events.createEvent);
+	app.post("/createEvent", events.createEvent);
 
 	// not required
 	// app.put("/editEvent", events.editEvent);
@@ -36,7 +36,7 @@ module.exports = app => {
 
 	app.get("/eventsByCity", events.eventsByCity);
 
-	// app.post("/joinEvent", user.joinEvent);
+	app.post("/joinEvent", events.joinEvent);
 
 	// not required
 	// app.delete("/leaveEvent", user.leaveEvent);

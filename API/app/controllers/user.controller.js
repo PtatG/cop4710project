@@ -74,6 +74,7 @@ exports.loginUser = (req, res) => {
 			});
 		}
 
+		// token expires after 24 hours
 		let payload = {userId: data.id,};
 		let token = jwt.sign(payload);
 		let id = data.id;

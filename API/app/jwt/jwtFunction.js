@@ -13,7 +13,7 @@ module.exports = {
     // Token signing options
     let signOptions = {
       issuer: "COP4710 Project",
-      expiresIn: "1h",
+      expiresIn: "24h",
       algorithm: "RS256"
     };
 

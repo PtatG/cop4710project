@@ -2,7 +2,64 @@
 // date written: 12/5/20
 // purpose: COP4710 Database Project
 const Event = require("../models/event.model.js");
+const Participant = require("../models/participant.model.js");
 const jwt = require("../jwt/jwtFunction.js");
+
+// create new event
+// required input: token and title
+// output: eventid, title, and message
+exports.createEvent = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.title) {
+		return res.status(400).json({
+			message: "Event title required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then decrypt user ID
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token could not be verified."
+    });
+  }
+
+	const events = new Event({
+		title: req.body.title,
+		description: req.body.description,
+		url: req.body.url,
+		startdate: req.body.startdate,
+		enddate: req.body.enddate,
+		address: req.body.address,
+		city: req.body.city,
+		state: req.body.state,
+		zipcode: req.body.zipcode,
+		organizer: userId,
+		active: false
+	});
+
+	Event.createEvent(events, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't create event."
+			});
+		}
+		res.json({
+			eventid: data.eventid,
+			title: data.title,
+			message: "Created event " + data.title + " successfully!"
+		});
+	});
+}; // end createEvent
 
 // get events between start and end dates
 // required inputs: startdate and enddate
@@ -61,3 +118,53 @@ exports.eventsByCity = (req, res) => {
 		});
 	});
 }; // end eventsByCity
+
+// join an event
+// required input: token, eventid, and title
+// output: message
+exports.joinEvent = (req, res) => {
+	// check required field
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.eventid) {
+		return res.status(400).json({
+			message: "eventid required."
+		});
+	}
+	if (!req.body.title) {
+		return res.status(400).json({
+			message: "Event title required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then decrypt user ID
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token could not be verified."
+    });
+  }
+
+	const participants = new Participant({
+		eventid: req.body.eventid,
+		userid: userId
+	});
+
+	Event.joinEvent(participants, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't join event."
+			});
+		}
+		res.json({
+			message: "Joined event " + req.body.title + " successfully!"
+		});
+	});
+}; // end joinEvent

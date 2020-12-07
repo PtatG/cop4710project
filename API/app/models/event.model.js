@@ -17,6 +17,15 @@ const Event = function(events) {
 	this.active = events.active;
 };
 
+Event.createEvent = (newEvent, result) => {
+	sql.query("INSERT INTO events SET ?", newEvent, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		return result(null, {title: res.title, ...newEvent});
+	});
+};
+
 Event.eventsByDate = (dates, result) => {
 	sql.query(`SELECT * FROM events WHERE startdate >= '${dates.startdate}'
 						AND enddate <= '${dates.enddate}'`, (err, res) => {
@@ -39,6 +48,15 @@ Event.eventsByCity = (city, result) => {
 			return result(null, res);
 		}
 		return result({err: "Event not found."}, null);
+	});
+};
+
+Event.joinEvent = (joinEvent, result) => {
+	sql.query("INSERT INTO participants SET ?", joinEvent, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		return result(null, {res: "Joined event."});
 	});
 };
 
