@@ -16,9 +16,9 @@ module.exports = app => {
 	// triggers in the db to delete from other tables
 	// app.post("/deleteUser", users.deleteUser);
 
-	// app.post("/listAdmins", events.listAdmins);
+	app.post("/listAdmins", events.listAdmins);
 
-	// app.post("/adminEvents", events.adminEvents);
+	app.post("/adminEvents", events.adminEvents);
 
 	// app.post("/listUsers", events.listUsers);
 

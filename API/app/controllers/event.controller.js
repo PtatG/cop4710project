@@ -5,7 +5,100 @@ const Event = require("../models/event.model.js");
 const Participant = require("../models/participant.model.js");
 const jwt = require("../jwt/jwtFunction.js");
 
-// approve an event
+// Super Admin lists all admins/organizers
+// required input: token
+// output: admins array message
+exports.listAdmins = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID and level
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+		level = token.payload.level;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token couldn't be verified."
+    });
+  }
+
+	// check user permission level
+	if (level != 2) {
+		return res.status(401).json({
+			message: "User needs to be a Super Admin to approve events."
+		});
+	}
+
+	Event.listAdmins(userId, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't list admins."
+			});
+		}
+		res.json({
+			admins: data,
+			message: "Admins successfully retrieved!"
+		});
+	});
+}; // end listAdmins
+
+// Super Admin lists all events organized by a particular admin
+// required input: token and id
+// output: message
+exports.adminEvents = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.id) {
+		return res.status(400).json({
+			message: "Admin ID required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID and level
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+		level = token.payload.level;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token couldn't be verified."
+    });
+  }
+
+	// check user permission level
+	if (level != 2) {
+		return res.status(401).json({
+			message: "User needs to be a Super Admin to approve events."
+		});
+	}
+
+	Event.adminEvents(req.body.id, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't list admin's events."
+			});
+		}
+		res.json({
+			events: data,
+			message: "Admin's events successfully retrieved!"
+		});
+	});
+}; // end adminEvents
+
+// Super Admin approves an event
 // required input: token and eventid
 // output: message
 exports.approveEvent = (req, res) => {
@@ -55,7 +148,7 @@ exports.approveEvent = (req, res) => {
 
 // create new event
 // required input: token and title
-// output: eventid, title, and message
+// output: token, eventid, title, and message
 exports.createEvent = (req, res) => {
 	// check required fields
 	if (!req.body.token) {

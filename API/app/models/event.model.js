@@ -18,6 +18,32 @@ const Event = function(events) {
 	this.active = events.active;
 };
 
+Event.listAdmins = (id, result) => {
+	sql.query(`SELECT DISTINCT users.id, users.username
+						 FROM users INNER JOIN events
+						 ON users.id = events.organizer`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res);
+		}
+		return result({err: "Admins not found."}, null);
+	});
+};
+
+Event.adminEvents = (id, result) => {
+	sql.query(`SELECT * FROM events WHERE organizer = '${id}'`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res);
+		}
+		return result({err: "Events not found."}, null);
+	});
+};
+
 Event.approveEvent = (id, result) => {
 	sql.query(`UPDATE events SET active = 1 WHERE eventid = '${id}'`, (err, res) => {
 		if (err) {
