@@ -6,7 +6,7 @@ export default class Login extends React.Component {
 		super(props);
 		this.state = {
 			formdata: {
-				loginemail: "",
+				loginusername: "",
 				loginpassword: ""
 			}
 		}
@@ -26,6 +26,32 @@ export default class Login extends React.Component {
 	submitForm(e) {
 		console.log("Submitting...");
 		console.log(this.state.formdata)
+		
+		var jsonPayload = '{"username" : "' + this.state.formdata.loginusername + '", "password" : "' + this.state.formdata.loginpassword + '"}';
+			
+		fetch('http://127.0.0.1:3000/loginUser', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: jsonPayload,
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			if (data.error == "") {
+				this.setState({ redirect: "/" });
+			}
+			else {
+				document.getElementById("errorReturn").innerHTML = data.error;
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			document.getElementById("errorReturn").innerHTML = error;
+			return;
+		});
+		
 		e.preventDefault();
 	}
 	
@@ -37,14 +63,14 @@ export default class Login extends React.Component {
 					<h4>Login</h4>
 					<form onSubmit={this.submitForm}>
 						<input
-						 id="loginemail"
-						 name="loginemail"
+						 id="loginusername"
+						 name="loginusername"
 						 autoComplete="off"
-						 placeholder="Your email address"
-						 value={formdata.loginemail}
+						 placeholder="Your username"
+						 value={formdata.loginusername}
 						 onChange={this.changeForm}
 						/>
-						<p id="emailError" className="errorReturn" />
+						<p id="nameError" className="errorReturn" />
 						<input
 						 id="loginpassword"
 						 name="loginpassword"
