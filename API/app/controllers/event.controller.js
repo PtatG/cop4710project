@@ -5,6 +5,56 @@ const Event = require("../models/event.model.js");
 const Participant = require("../models/participant.model.js");
 const jwt = require("../jwt/jwtFunction.js");
 
+// approve an event
+// required input: token, eventid, and level
+// output: message
+exports.approveEvent = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.eventid) {
+		return res.status(400).json({
+			message: "Event ID required."
+		});
+	}
+	if (!req.body.level) {
+		return res.status(400).json({
+			message: "User level required."
+		});
+	}
+	if (req.body.level != 2) {
+		return res.status(401).json({
+			message: "User needs to be a Super Admin to approve events."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token couldn't be verified."
+    });
+  }
+
+	Event.approveEvent(req.body.eventid, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't approve event."
+			});
+		}
+		res.json({
+			message: "Event successfully approved!"
+		});
+	});
+}; // end approveEvent
+
 // create new event
 // required input: token and title
 // output: eventid, title, and message
@@ -23,7 +73,7 @@ exports.createEvent = (req, res) => {
 
 	let token, userId;
   if (jwt.verify(req.body.token)) {
-    // decode jwt, then decrypt user ID
+    // decode jwt, then store user ID
     token = jwt.decode(req.body.token);
     userId = token.payload.userId;
   }
@@ -60,6 +110,52 @@ exports.createEvent = (req, res) => {
 		});
 	});
 }; // end createEvent
+
+// list all events this admin has created
+// required input: token and level
+// output: events array and message
+exports.listSelfEvents = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.level) {
+		return res.status(400).json({
+			message: "User level required."
+		});
+	}
+	if (req.body.level == 0) {
+		return res.status(401).json({
+			message: "This user has not created any events."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token could not be verified."
+    });
+  }
+
+	Event.listSelfEvents(userId, (err, data) => {
+		if (err) {
+			return res.status(404).json({
+				message: "Error: Couldn't find events."
+			});
+		}
+		res.json({
+			events: data,
+			message: "Got events successfully!"
+		});
+	});
+}; // end listSelfEvents
 
 // get events between start and end dates
 // required inputs: startdate and enddate
@@ -142,7 +238,7 @@ exports.joinEvent = (req, res) => {
 
 	let token, userId;
   if (jwt.verify(req.body.token)) {
-    // decode jwt, then decrypt user ID
+    // decode jwt, then store user ID
     token = jwt.decode(req.body.token);
     userId = token.payload.userId;
   }
