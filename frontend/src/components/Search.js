@@ -10,10 +10,8 @@ class Search extends React.Component {
 				cityname: "",
 				startdate: "",
 				enddate: "",
-				results: "",
-				target: "",
-				targettitle: ""
-			}
+			},
+			results: []
 		}
 		this.changeForm = this.changeForm.bind(this);
 		this.submitForm = this.submitForm.bind(this);
@@ -47,7 +45,7 @@ class Search extends React.Component {
 			var elem = document.getElementById("search-err");
 			elem.innerHTML = response.message;
 			console.log('Success:', response.events);
-			this.setState({ results: response.events });
+			this.setState({ results: response.events || []});
 			setTimeout(() => {
 				elem.innerHTML = "";
 			}, 5000)
@@ -73,7 +71,7 @@ class Search extends React.Component {
 			var elem = document.getElementById("search-err");
 			elem.innerHTML = response.message;
 			console.log('Success:', response.events);
-			this.setState({ results: response.events });
+			this.setState({ results: response.events || []});
 			setTimeout(() => {
 				elem.innerHTML = "";
 			}, 5000)
@@ -82,19 +80,18 @@ class Search extends React.Component {
 		e.preventDefault();
 	}
 	
-	submitJoin(e) {
+	submitJoin(eventid, title) {
 		console.log("Joining...");
-		console.log(this.state.target);
+		console.log(eventid, title);
 		
-		const {formdata} = this.state;
+		const {} = this.state;
 		var jsonPayload = `
 			{
 				"token": "${this.props.user.token}",
-				"eventid": "${formdata.target}",
-				"title": "${formdata.targettitle}"
+				"eventid": "${eventid}",
+				"title": "${title}"
 			}
 		`
-		console.log(jsonPayload);
 		
 		fetch('http://127.0.0.1:8080/joinEvent/', {
 			method: 'POST',
@@ -108,7 +105,7 @@ class Search extends React.Component {
 		}).then(response => {
 			var elem = document.getElementById("search-err");
 			elem.innerHTML = response.message;
-			console.log('Success:', response.events);
+			console.log('Success:', response.message);
 			setTimeout(() => {
 				elem.innerHTML = "";
 			}, 5000)
@@ -120,8 +117,9 @@ class Search extends React.Component {
 	
 		const sresult = []
 		const temp = []
+		var result = null;
 		
-		if (this.state.results != null)
+		if (this.state.results.length != 0)
 		{
 			temp.push(
 				<div className="inline">
@@ -148,29 +146,29 @@ class Search extends React.Component {
 			)
 			for (var i = 0; i < this.state.results.length; i++)
 			{
+				result = this.state.results[i];
 				temp.push(
 					<div className="inline">
 						<tbody key={i}>
 							<tr id={i} key={i}>
 								<td>
-									{this.state.results[i].title} |
+									{result.title} |
 								</td>
 								<td>
-									{this.state.results[i].city} |
+									{result.city} |
 								</td>
 								<td>
-									{this.state.results[i].startdate.substring(0,10)} |
+									{result.startdate.substring(0,10)} |
 								</td>
 								<td>
-									{this.state.results[i].enddate.substring(0,10)} |
+									{result.enddate.substring(0,10)} |
 								</td>
 								<td>
-									{this.state.results[i].description}
+									{result.description}
 								</td>
 								<button
 								 type="button"
-								 onClick={() => this.setState({ target: this.state.results[i].eventid, targettitle: this.state.results[i].title }), this.submitJoin}
-								 type="submit">
+								 onClick={() => this.submitJoin(result.eventid,result.title)}>
 									Join Event
 								</button>
 							</tr>

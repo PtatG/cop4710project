@@ -115,10 +115,12 @@
 	background-repeat: repeat;
 	background-size: 1700px;
 	position: absolute;
-	z-index: 1
+	z-index: 1;
+	overflow: auto
 }
 
 .resultsTable {
+	margin: auto;
 	font-family: Ubuntu, Verdana, Geneva, sans-serif;
 	font-weight: 300;
 	font-size: 1rem;
@@ -128,8 +130,7 @@
 	border-color: #424242;
 	border-radius: 50px;
 	align-items: center;
-	position: center;
-	margin-left: 3em;
+	text-align: center;
 }
 
 .errorReturn {
