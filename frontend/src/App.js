@@ -2,8 +2,10 @@ import './App.css';
 import React from "react";
 import ReactDOM from "react-dom";
 import {render} from "react-dom";
+import {connect} from 'react-redux';
 
-function App() {
+function App(props) {
+  if(props.user) console.log(props.user);
   return (
     <div className = "homePage">
 		<div className = "homeContainer">
@@ -14,4 +16,8 @@ function App() {
   );
 }
 
-export default App;
+const mapState = state => ({
+	user: state.user
+})
+
+export default connect(mapState)(App);

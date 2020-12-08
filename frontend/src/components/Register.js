@@ -1,16 +1,19 @@
 import React from "react";
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-export default class Register extends React.Component {
+class Register extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			formdata: {
+				registername: "",
 				registeremail: "",
 				registeruser: "",
 				registercity: "",
 				registerpassword: ""
-			}
+			},
+			registerSuccess: false
 		}
 		this.changeForm = this.changeForm.bind(this);
 		this.submitForm = this.submitForm.bind(this);
@@ -28,9 +31,17 @@ export default class Register extends React.Component {
 	submitForm(e) {
 		console.log("Submitting...");
 		console.log(this.state.formdata)
-		
-		var jsonPayload = '{"username" : "' + this.state.formdata.registeruser + '", "password" : "' + this.state.formdata.registerpassword + '", "city" : "' + this.state.formdata.registercity + '", "email" : "' + this.state.formdata.registeremail + '"}';
-		fetch('http://127.0.0.1:3000/registerUser', {
+		const {formdata} = this.state;
+		var jsonPayload = `
+			{
+				"email": "${formdata.registeremail}",
+				"name": "${formdata.registername}",
+				"city": "${formdata.registercity}",
+				"username": "${formdata.registeruser}",
+				"password": "${formdata.registerpassword}"
+			}
+		`
+		fetch('http://127.0.0.1:8080/registerUser', {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
@@ -40,19 +51,39 @@ export default class Register extends React.Component {
 			console.log(res)
 			return res.json()
 		}).then(response => {
-			console.log(response)
+			if(response.username !== undefined) {
+				console.log(response.username)
+				this.setState({registerSuccess: true})
+				return;
+			}
+			var elem = document.getElementById("register-err");
+			elem.innerHTML = response.message;
+			setTimeout(() => {
+				elem.innerHTML = "";
+			}, 5000)
 		});
 		
 		e.preventDefault();
 	}
 	
 	render() {
-		const {formdata} = this.state;
+		const {formdata, registerSuccess} = this.state;
+		if(registerSuccess) {
+			return <Redirect to="/login" />
+		}
 		return (
 			<div className="registerPage">
 				<div className="container">
 					<h4>Register</h4>
 					<form onSubmit={this.submitForm}>
+						<input
+						id="registername"
+						name="registername"
+						autoComplete="off"
+						placeholder="Your name"
+						onChange={this.changeForm}
+						value={formdata.registername}
+						/>
 						<input
 						id="registeremail"
 						name="registeremail"
@@ -93,8 +124,16 @@ export default class Register extends React.Component {
 							</button>
 						</div>
 					</form>
+					<p id="register-err" className="errorReturn"></p>
 				</div>
 			</div>
 		)
 	}
 }
+
+const register = data => ({
+	type: "LOAD_USER",
+	user: data
+})
+
+export default connect(null, {register})(Register);

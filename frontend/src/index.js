@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
 import {render} from "react-dom";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import './App.css';
@@ -14,26 +15,29 @@ import Login from './components/Login';
 import Register from './components/Register';
 
 import reportWebVitals from './reportWebVitals';
+import store from './store';
 
 function Index() {
 	componentDidMount();
 	return (
-		<BrowserRouter>
-			<div className="outerContainer">
-				<Nav />
-				<Route path='/' exact component={App} />
-				<Route path='/lookup' exact component={Lookup} />
-				<Route path='/host' exact component={Host} />
-				<Route path='/search' exact component={Search} />
-				<Route path='/login' exact component={Login} />
-				<Route path='/register' exact component={Register} />
-			</div>
-		</BrowserRouter>
+		<Provider store={store}>
+			<BrowserRouter>
+				<div className="outerContainer">
+					<Nav />
+					<Route path='/' exact component={App} />
+					<Route path='/lookup' exact component={Lookup} />
+					<Route path='/host' exact component={Host} />
+					<Route path='/search' exact component={Search} />
+					<Route path='/login' exact component={Login} />
+					<Route path='/register' exact component={Register} />
+				</div>
+			</BrowserRouter>
+		</Provider>
 	);
 }
 
 function componentDidMount() {
-	fetch('http://127.0.0.1:3000/', {
+	fetch('http://127.0.0.1:8080/', {
 		method: 'GET',
 		headers: {
 			'Content-type': 'application/json',

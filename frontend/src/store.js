@@ -1,15 +1,15 @@
 import {createStore} from 'redux';
 
 const initState = {
-	text: ""
+	user: null
 }
 
 function reducer(state = initState, action) {
 	switch(action.type) {
-		case "TEST":
+		case "LOAD_USER":
 			return {
 				...state, 
-				text: action.text
+				user: action.user
 			}
 		default: 
 			return state;

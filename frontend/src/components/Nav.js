@@ -1,15 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-function Nav() {
+function Nav(props) {
 	const navStyle = {
 		color: 'white'
 	};
 	
-	return <UserLink />
+	return <UserLink user={props.user} />
 }
 
-function UserLink() {
+function UserLink(props) {
 	const navStyle = {
 		color: 'white'
 	};
@@ -40,4 +41,8 @@ function UserLink() {
 	)
 }
 
-export default Nav;
+const mapState = state => ({
+	user: state.user
+})
+
+export default connect(mapState)(Nav);

@@ -1,14 +1,16 @@
 import React from "react";
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			formdata: {
 				loginusername: "",
 				loginpassword: ""
-			}
+			},
+			loginSuccess: false
 		}
 		this.changeForm = this.changeForm.bind(this);
 		this.submitForm = this.submitForm.bind(this);
@@ -29,21 +31,30 @@ export default class Login extends React.Component {
 		
 		var jsonPayload = '{"username" : "' + this.state.formdata.loginusername + '", "password" : "' + this.state.formdata.loginpassword + '"}';
 			
-		fetch('http://127.0.0.1:3000/loginUser', {
+		fetch('http://127.0.0.1:8080/loginUser', {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
 			},
 			body: jsonPayload,
 		})
-		.then(response => response.json())
+		.then(response => response.json({a:1}))
 		.then(data => {
-			console.log('Success:', data);
-			if (data.error == "") {
-				this.setState({ redirect: "/" });
-			}
-			else {
-				document.getElementById("errorReturn").innerHTML = data.error;
+			switch(data.message) {
+				case "Username required.":
+				case "Password required.":
+				case "Error: Could not find user.":
+				case "Incorrect password.":
+					var elem = document.getElementById("errorReturn")
+					elem.innerHTML = data.message;
+					setTimeout(() => {
+						elem.innerHTML = "";
+					}, 5000);
+					break;
+				default:
+					console.log("Success", data)
+					this.props.login(data)
+					this.setState({loginSuccess: true})
 			}
 		})
 		.catch((error) => {
@@ -56,7 +67,10 @@ export default class Login extends React.Component {
 	}
 	
 	render() {
-		const {formdata} = this.state;
+		const {formdata, loginSuccess} = this.state;
+		if(loginSuccess) {
+			return <Redirect to="/" />
+		}
 		return (
 			<div className="registerPage">
 				<div className="container">
@@ -97,3 +111,10 @@ export default class Login extends React.Component {
 		)
 	}
 }
+
+const login = data => ({
+	type: "LOAD_USER",
+	user: data
+})
+
+export default connect(null, {login})(Login);
