@@ -7,6 +7,16 @@
   top: 1rem
 }
 
+.scontainer {
+  margin: 0 auto;
+  margin-top: 75px;
+  width: 500px;
+  /*display: inline-block;*/
+  justify-content: space-around;
+  position: relative;
+  top: 1rem
+}
+
 .inline {
   display: inline-flex;
 }
@@ -128,7 +138,7 @@
 	background-color: white;
 	border: 2px solid;
 	border-color: #424242;
-	border-radius: 50px;
+	border-radius: 5px;
 	align-items: center;
 	text-align: center;
 }
