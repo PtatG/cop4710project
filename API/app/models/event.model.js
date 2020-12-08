@@ -105,6 +105,18 @@ Event.listSelfEvents = (id, result) => {
 	});
 };
 
+Event.listOneEvent = (eventid, result) => {
+	sql.query(`SELECT * FROM events WHERE eventid = '${eventid}'`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res[0]);
+		}
+		return result({err: "Event not found."}, null);
+	});
+};
+
 Event.eventsByDate = (dates, result) => {
 	sql.query(`SELECT * FROM events WHERE startdate >= '${dates.startdate}'
 						AND enddate <= '${dates.enddate}' ORDER BY eventid`, (err, res) => {

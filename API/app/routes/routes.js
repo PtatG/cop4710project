@@ -33,6 +33,8 @@ module.exports = app => {
 
 	app.post("/listSelfEvents", events.listSelfEvents);
 
+	app.get("/listOneEvent/:eventid", events.listOneEvent);
+
 	app.get("/eventsByDate/:startdate/:enddate", events.eventsByDate);
 
 	app.get("/eventsByCity/:city", events.eventsByCity);

@@ -348,6 +348,41 @@ exports.listSelfEvents = (req, res) => {
 	});
 }; // end listSelfEvents
 
+// get one event with eventid
+// required inputs: eventid
+// outputs: all event fields of one event and message
+exports.listOneEvent = (req, res) => {
+	// check required fields
+	if (!req.params.eventid) {
+		return res.status(400).json({
+			message: "Event ID required."
+		});
+	}
+
+	Event.listOneEvent(req.params.eventid, (err, data) => {
+		if (err) {
+			return res.status(404).json({
+				message: "Error: Couldn't find events by event ID."
+			});
+		}
+		res.json({
+			eventid: data.eventid,
+			title: data.title,
+			description: data.description,
+			url: data.url,
+			startdate: data.startdate,
+			enddate: data.enddate,
+			address: data.address,
+			city: data.city,
+			state: data.state,
+			zipcode: data.zipcode,
+			organizer: data.organizer,
+			active: data.active[0],
+			message: "Got one event successfully!"
+		});
+	});
+}; // end listOneEvent
+
 // get events between start and end dates
 // required inputs: startdate and enddate
 // outputs: events array and message
