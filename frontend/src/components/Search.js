@@ -6,11 +6,14 @@ export default class Search extends React.Component {
 		super(props);
 		this.state = {
 			formdata: {
-				cityname: ""
+				cityname: "",
+				startdate: "",
+				enddate: ""
 			}
 		}
 		this.changeForm = this.changeForm.bind(this);
 		this.submitForm = this.submitForm.bind(this);
+		this.submitFormDate = this.submitFormDate.bind(this);
 	}
 	
 	changeForm(e) {
@@ -38,6 +41,33 @@ export default class Search extends React.Component {
 		}).then(response => {
 			var elem = document.getElementById("search-err");
 			elem.innerHTML = response.message;
+			console.log('Success:', response.events);
+			console.log(response);
+			setTimeout(() => {
+				elem.innerHTML = "";
+			}, 5000)
+		});
+		
+		e.preventDefault();
+	}
+		
+	submitFormDate(e) {
+		console.log("Submitting...");
+		console.log(this.state.formdata)
+		
+		const {formdata} = this.state;
+		fetch('http://127.0.0.1:8080/eventsByDate/'+formdata.startdate+'/'+formdata.enddate, {
+			method: 'GET',
+			headers: {
+				'Content-type': 'application/json',
+			},
+		}).then(res => {
+			console.log(res)
+			return res.json()
+		}).then(response => {
+			var elem = document.getElementById("search-err");
+			elem.innerHTML = response.message;
+			console.log('Success:', response.events);
 			setTimeout(() => {
 				elem.innerHTML = "";
 			}, 5000)
@@ -66,7 +96,30 @@ export default class Search extends React.Component {
 								<button
 								 type="button"
 								 type="submit">
-									Search
+									Search by City
+								</button>
+							</div>
+						</form>
+						<form onSubmit={this.submitFormDate}>
+							<h1>Start Date</h1>
+							<input type="date"
+							 id="startdate"
+							 name="startdate"
+							 className="inline"
+							 onChange={this.changeForm}
+							/>
+							<h1>End Date</h1>
+							<input type="date"
+							 id="enddate"
+							 name="enddate"
+							 className="inline"
+							 onChange={this.changeForm}
+							/>
+							<div>
+								<button
+								 type="button"
+								 type="submit">
+									Search by Date
 								</button>
 							</div>
 						</form>

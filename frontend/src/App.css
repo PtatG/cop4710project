@@ -7,12 +7,8 @@
   top: 1rem
 }
 
-.inContainer {
-  margin: 0 auto;
-  width: 500px;
-  display: inline-block;
-  justify-content: space-around;
-  top: 1rem
+.inline {
+  display: inline-flex;
 }
 
 .collapsable {

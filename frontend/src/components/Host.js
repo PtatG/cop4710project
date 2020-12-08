@@ -41,7 +41,7 @@ class Host extends React.Component {
 				"url": "${formdata.eventurl}",
 				"startdate": "${formdata.startdate}",
 				"enddate": "${formdata.enddate}",
-				"city": "${formdata.city}"
+				"city": "${formdata.eventcity}"
 			}
 		`
 		console.log(jsonPayload);
@@ -96,20 +96,18 @@ class Host extends React.Component {
 						 value={formdata.eventcity}
 						 onChange={this.changeForm}
 						/>
-						<div className="inContainer">
-							<h1>Start Date</h1>
-							<input type="date"
-							 id="startdate"
-							 name="startdate"
-							 onChange={this.changeForm}
-							/>
-							<h1>End Date</h1>
-							<input type="date"
-							 id="enddate"
-							 name="enddate"
-							 onChange={this.changeForm}
-							/>
-						</div>
+						<h1>Start Date</h1>
+						<input type="date"
+						 id="startdate"
+						 name="startdate"
+						 onChange={this.changeForm}
+						/>
+						<h1>End Date</h1>
+						<input type="date"
+						 id="enddate"
+						 name="enddate"
+						 onChange={this.changeForm}
+						/>
 						<input
 						 id="eventurl"
 						 name="eventurl"

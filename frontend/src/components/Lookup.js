@@ -49,6 +49,15 @@ export default class Lookup extends React.Component {
 							</button>
 						</div>
 					</form>
+					<button type="submit">
+						All Users
+					</button>
+					<button type="submit">
+						All Events
+					</button>
+					<button type="submit">
+						All Admins
+					</button>
 				</div>
 				<div className="container">
 					<button 
