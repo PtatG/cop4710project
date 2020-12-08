@@ -1,14 +1,18 @@
 import React from "react";
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-export default class Host extends React.Component {
+class Host extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			formdata: {
 				eventtitle: "",
 				eventdesc: "",
-				eventurl: ""
+				eventurl: "",
+				startdate: "",
+				enddate: "",
+				eventcity: ""
 			}
 		}
 		this.changeForm = this.changeForm.bind(this);
@@ -27,13 +31,44 @@ export default class Host extends React.Component {
 	submitForm(e) {
 		console.log("Submitting...");
 		console.log(this.state.formdata)
+		
+		const {formdata} = this.state;
+		var jsonPayload = `
+			{
+				"token": "${this.props.user.token}",
+				"title": "${formdata.eventtitle}",
+				"description": "${formdata.eventdesc}",
+				"url": "${formdata.eventurl}",
+				"startdate": "${formdata.startdate}",
+				"enddate": "${formdata.enddate}",
+				"city": "${formdata.city}"
+			}
+		`
+		console.log(jsonPayload);
+		fetch('http://127.0.0.1:8080/createEvent', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: jsonPayload,
+		}).then(res => {
+			console.log(res)
+			return res.json()
+		}).then(response => {
+			var elem = document.getElementById("errorReturn");
+			elem.innerHTML = response.message;
+			setTimeout(() => {
+				elem.innerHTML = "";
+			}, 5000)
+		});
+		
 		e.preventDefault();
 	}
 	
 	render() {
 		const {formdata} = this.state;
 		return (
-			<div className="registerPage">
+			<div className="userPage">
 				<div className="container">
 					<h4>Event Hosting</h4>
 					<form onSubmit={this.submitForm}>
@@ -49,14 +84,36 @@ export default class Host extends React.Component {
 						<textarea
 						 id="eventdesc"
 						 name="eventdesc"
-						 placeholder="Event Description"
+						 placeholder="Event Description (Optional)"
 						 value={formdata.eventdesc}
 						 onChange={this.changeForm}
 						/>
 						<input
+						 id="eventcity"
+						 name="eventcity"
+						 autoComplete="off"
+						 placeholder="City (Optional)"
+						 value={formdata.eventcity}
+						 onChange={this.changeForm}
+						/>
+						<div className="inContainer">
+							<h1>Start Date</h1>
+							<input type="date"
+							 id="startdate"
+							 name="startdate"
+							 onChange={this.changeForm}
+							/>
+							<h1>End Date</h1>
+							<input type="date"
+							 id="enddate"
+							 name="enddate"
+							 onChange={this.changeForm}
+							/>
+						</div>
+						<input
 						 id="eventurl"
 						 name="eventurl"
-						 placeholder="Event URL"
+						 placeholder="Event URL (Optional)"
 						 value={formdata.eventurl}
 						 onChange={this.changeForm}
 						/>
@@ -78,3 +135,9 @@ export default class Host extends React.Component {
 		)
 	}
 }
+
+const mapState = state => ({
+	user: state.user
+})
+
+export default connect(mapState)(Host);

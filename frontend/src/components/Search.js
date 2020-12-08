@@ -25,6 +25,24 @@ export default class Search extends React.Component {
 	submitForm(e) {
 		console.log("Submitting...");
 		console.log(this.state.formdata)
+		
+		const {formdata} = this.state;
+		fetch('http://127.0.0.1:8080/eventsByCity/'+formdata.cityname, {
+			method: 'GET',
+			headers: {
+				'Content-type': 'application/json',
+			},
+		}).then(res => {
+			console.log(res)
+			return res.json()
+		}).then(response => {
+			var elem = document.getElementById("search-err");
+			elem.innerHTML = response.message;
+			setTimeout(() => {
+				elem.innerHTML = "";
+			}, 5000)
+		});
+		
 		e.preventDefault();
 	}
 	
@@ -52,6 +70,7 @@ export default class Search extends React.Component {
 								</button>
 							</div>
 						</form>
+						<p id="search-err" className="errorReturn"></p>
 					</div>
 				</div>
 			</div>
