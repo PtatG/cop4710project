@@ -7,7 +7,7 @@ const jwt = require("../jwt/jwtFunction.js");
 
 // Super Admin lists all admins/organizers
 // required input: token
-// output: admins array message
+// output: admins array and message
 exports.listAdmins = (req, res) => {
 	// check required fields
 	if (!req.body.token) {
@@ -32,7 +32,7 @@ exports.listAdmins = (req, res) => {
 	// check user permission level
 	if (level != 2) {
 		return res.status(401).json({
-			message: "User needs to be a Super Admin to approve events."
+			message: "User needs to be a Super Admin to list admins."
 		});
 	}
 
@@ -81,7 +81,7 @@ exports.adminEvents = (req, res) => {
 	// check user permission level
 	if (level != 2) {
 		return res.status(401).json({
-			message: "User needs to be a Super Admin to approve events."
+			message: "User needs to be a Super Admin to list an admin's events."
 		});
 	}
 
@@ -97,6 +97,99 @@ exports.adminEvents = (req, res) => {
 		});
 	});
 }; // end adminEvents
+
+// Super Admin lists all users
+// required input: token
+// output: users array and message
+exports.listUsers = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID and level
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+		level = token.payload.level;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token couldn't be verified."
+    });
+  }
+
+	// check user permission level
+	if (level != 2) {
+		return res.status(401).json({
+			message: "User needs to be a Super Admin to list all users."
+		});
+	}
+
+	Event.listUsers(userId, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't list users."
+			});
+		}
+		res.json({
+			users: data,
+			message: "Users successfully retrieved!"
+		});
+	});
+}; // end listUsers
+
+// Super Admin lists titles of all events this user has attended
+// required input: token and id
+// output: titles array and message
+exports.userEvents = (req, res) => {
+	// check required fields
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.id) {
+		return res.status(400).json({
+			message: "User ID required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID and level
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+		level = token.payload.level;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token couldn't be verified."
+    });
+  }
+
+	// check user permission level
+	if (level != 2) {
+		return res.status(401).json({
+			message: "User needs to be a Super Admin to list events a user has attended."
+		});
+	}
+
+	Event.userEvents(req.body.id, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't list user's events."
+			});
+		}
+		res.json({
+			titles: data,
+			message: "User's events successfully retrieved!"
+		});
+	});
+}; // end userEvents
 
 // Super Admin approves an event
 // required input: token and eventid
@@ -313,7 +406,7 @@ exports.eventsByCity = (req, res) => {
 	});
 }; // end eventsByCity
 
-// join an event
+// user joins an event
 // required input: token, eventid, and title
 // output: message
 exports.joinEvent = (req, res) => {
@@ -325,7 +418,7 @@ exports.joinEvent = (req, res) => {
 	}
 	if (!req.body.eventid) {
 		return res.status(400).json({
-			message: "eventid required."
+			message: "Event ID required."
 		});
 	}
 	if (!req.body.title) {
@@ -362,3 +455,53 @@ exports.joinEvent = (req, res) => {
 		});
 	});
 }; // end joinEvent
+
+// user leaves an event
+// required input: token, eventid, and title
+// output: message
+exports.leaveEvent = (req, res) => {
+	// check required field
+	if (!req.body.token) {
+		return res.status(400).json({
+			message: "Token required."
+		});
+	}
+	if (!req.body.eventid) {
+		return res.status(400).json({
+			message: "eventid required."
+		});
+	}
+	if (!req.body.title) {
+		return res.status(400).json({
+			message: "Event title required."
+		});
+	}
+
+	let token, userId;
+  if (jwt.verify(req.body.token)) {
+    // decode jwt, then store user ID
+    token = jwt.decode(req.body.token);
+    userId = token.payload.userId;
+  }
+  else {
+    return res.status(401).json({
+      message: "Token could not be verified."
+    });
+  }
+
+	Event.leaveEvent(req.body.eventid, userId, (err, data) => {
+		if (err) {
+			return res.status(500).json({
+				message: "Error: Couldn't leave event."
+			});
+		}
+		if (data.affectedRows == 0) {
+			return res.status(500).json({
+				message: "User isn't a participant of event " + req.body.title + "."
+			});
+		}
+		res.json({
+			message: "Left event " + req.body.title + " successfully!"
+		});
+	});
+}; // end leaveEvent

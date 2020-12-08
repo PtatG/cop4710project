@@ -46,7 +46,7 @@ exports.registerUser = (req, res) => {
 
 // login user
 // required inputs: username and password
-// outputs: token, username, email, name, city, and message
+// outputs: token, username, email, name, city, level, and message
 exports.loginUser = (req, res) => {
 	// check required fields
 	if (!req.body.username) {
@@ -93,6 +93,7 @@ exports.loginUser = (req, res) => {
 					name: name,
 					email: email,
 					city: city,
+					level: 2,
 					message: "User " + username + " login successful."
 				});
 			}
@@ -108,6 +109,7 @@ exports.loginUser = (req, res) => {
 						name: name,
 						email: email,
 						city: city,
+						level: 0,
 						message: "User " + username + " login successful."
 					});
 				}
@@ -121,6 +123,7 @@ exports.loginUser = (req, res) => {
 					name: name,
 					email: email,
 					city: city,
+					level: 1,
 					message: "User " + username + " login successful."
 				});
 			});

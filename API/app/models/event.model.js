@@ -21,7 +21,8 @@ const Event = function(events) {
 Event.listAdmins = (id, result) => {
 	sql.query(`SELECT DISTINCT users.id, users.username
 						 FROM users INNER JOIN events
-						 ON users.id = events.organizer`, (err, res) => {
+						 ON users.id = events.organizer
+						 ORDER BY users.id`, (err, res) => {
 		if (err) {
 			return result(err, null);
 		}
@@ -33,7 +34,36 @@ Event.listAdmins = (id, result) => {
 };
 
 Event.adminEvents = (id, result) => {
-	sql.query(`SELECT * FROM events WHERE organizer = '${id}'`, (err, res) => {
+	sql.query(`SELECT * FROM events WHERE organizer = '${id}'
+						 ORDER BY eventid`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res);
+		}
+		return result({err: "Events not found."}, null);
+	});
+};
+
+Event.listUsers = (id, result) => {
+	sql.query(`SELECT id, username FROM users ORDER BY id`, (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		if (res.length) {
+			return result(null, res);
+		}
+		return result({err: "Users not found."}, null);
+	});
+};
+
+Event.userEvents = (id, result) => {
+	sql.query(`SELECT events.title
+						 FROM events INNER JOIN participants
+						 ON events.eventid = participants.eventid
+						 AND participants.userid = '${id}'
+						 ORDER BY events.eventid`, (err, res) => {
 		if (err) {
 			return result(err, null);
 		}
@@ -63,7 +93,8 @@ Event.createEvent = (newEvent, result) => {
 };
 
 Event.listSelfEvents = (id, result) => {
-	sql.query(`SELECT * FROM events WHERE organizer = '${id}'`, (err, res) => {
+	sql.query(`SELECT * FROM events WHERE organizer = '${id}'
+						 ORDER BY eventid`, (err, res) => {
 		if (err) {
 			return result(err, null);
 		}
@@ -76,7 +107,7 @@ Event.listSelfEvents = (id, result) => {
 
 Event.eventsByDate = (dates, result) => {
 	sql.query(`SELECT * FROM events WHERE startdate >= '${dates.startdate}'
-						AND enddate <= '${dates.enddate}'`, (err, res) => {
+						AND enddate <= '${dates.enddate}' ORDER BY eventid`, (err, res) => {
 		if (err) {
 			return result(err, null);
 		}
@@ -88,7 +119,8 @@ Event.eventsByDate = (dates, result) => {
 };
 
 Event.eventsByCity = (city, result) => {
-	sql.query(`SELECT * FROM events WHERE city = '${city}'`, (err, res) => {
+	sql.query(`SELECT * FROM events WHERE city = '${city}'
+						 ORDER BY eventid`, (err, res) => {
 		if (err) {
 			return result(err, null);
 		}
@@ -105,6 +137,16 @@ Event.joinEvent = (joinEvent, result) => {
 			return result(err, null);
 		}
 		return result(null, {res: "Joined event."});
+	});
+};
+
+Event.leaveEvent = (eventid, userid, result) => {
+	sql.query(`DELETE FROM participants WHERE eventid = ? AND userid = ?`,
+						 [eventid, userid], (err, res) => {
+		if (err) {
+			return result(err, null);
+		}
+		return result(null, res);
 	});
 };
 

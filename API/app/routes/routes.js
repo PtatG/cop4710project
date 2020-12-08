@@ -20,9 +20,9 @@ module.exports = app => {
 
 	app.post("/adminEvents", events.adminEvents);
 
-	// app.post("/listUsers", events.listUsers);
+	app.post("/listUsers", events.listUsers);
 
-	// app.post("/userEvents", events.userEvents);
+	app.post("/userEvents", events.userEvents);
 
 	app.put("/approveEvent", events.approveEvent);
 
@@ -39,6 +39,5 @@ module.exports = app => {
 
 	app.post("/joinEvent", events.joinEvent);
 
-	// not required
-	// app.delete("/leaveEvent", user.leaveEvent);
+	app.post("/leaveEvent", events.leaveEvent);
 };
