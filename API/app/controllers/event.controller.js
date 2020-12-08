@@ -260,20 +260,20 @@ exports.listSelfEvents = (req, res) => {
 // outputs: events array and message
 exports.eventsByDate = (req, res) => {
 	// check required fields
-	if (!req.body.startdate) {
+	if (!req.params.startdate) {
 		return res.status(400).json({
 			message: "Start date required."
 		});
 	}
-	if (!req.body.enddate) {
+	if (!req.params.enddate) {
 		return res.status(400).json({
 			message: "End date required."
 		});
 	}
 
 	const events = new Event({
-		startdate: req.body.startdate,
-		enddate: req.body.enddate
+		startdate: req.params.startdate,
+		enddate: req.params.enddate
 	});
 
 	Event.eventsByDate(events, (err, data) => {
@@ -294,13 +294,13 @@ exports.eventsByDate = (req, res) => {
 // outputs: events array and message
 exports.eventsByCity = (req, res) => {
 	// check required field
-	if (!req.body.city) {
+	if (!req.params.city) {
 		return res.status(400).json({
 			message: "City required."
 		});
 	}
 
-	Event.eventsByCity(req.body.city, (err, data) => {
+	Event.eventsByCity(req.params.city, (err, data) => {
 		if (err) {
 			return res.status(404).json({
 				message: "Error: Couldn't find events by city."
