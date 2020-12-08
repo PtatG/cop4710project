@@ -45,7 +45,7 @@ export default class Lookup extends React.Component {
 						/>
 						<div>
 							<button type="submit">
-								Search
+								Search Hosts
 							</button>
 						</div>
 					</form>
@@ -53,11 +53,23 @@ export default class Lookup extends React.Component {
 						All Users
 					</button>
 					<button type="submit">
-						All Events
-					</button>
-					<button type="submit">
 						All Admins
 					</button>
+					<form onSubmit={this.submitForm}>
+						<input
+						 id="adminname"
+						 name="adminname"
+						 autoComplete="off"
+						 placeholder="Search Term"
+						 onChange={this.changeForm}
+						 value={formdata.adminname}
+						/>
+						<div>
+							<button type="submit">
+								Search Admins
+							</button>
+						</div>
+					</form>
 				</div>
 				<div className="container">
 					<button 
