@@ -6,8 +6,9 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 8080;
 
-// parse json requests
+// parse requests
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 // CORS policy fix
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
