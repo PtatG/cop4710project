@@ -1,7 +1,8 @@
 import React from "react";
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-export default class Search extends React.Component {
+class Search extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -165,14 +166,12 @@ export default class Search extends React.Component {
 								<td>
 									{this.state.results[i].description}
 								</td>
-								<form onSubmit={this.submitJoin}>
-									<button
-									 type="button"
-									 onClick={this.setState({ target: this.state.results[i].eventid, targettitle: this.state.results[i].title })}
-									 type="submit">
-										Join Event
-									</button>
-								</form>
+								<button
+								 type="button"
+								 onClick={() => this.setState({ target: this.state.results[i].eventid, targettitle: this.state.results[i].title }), this.submitJoin}
+								 type="submit">
+									Join Event
+								</button>
 							</tr>
 						</tbody>
 					</div>
@@ -237,3 +236,9 @@ export default class Search extends React.Component {
 		)
 	}
 }
+
+const mapState = state => ({
+	user: state.user
+})
+
+export default connect(mapState)(Search);
