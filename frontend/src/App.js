@@ -5,7 +5,6 @@ import {render} from "react-dom";
 import {connect} from 'react-redux';
 
 function App(props) {
-  if(props.user) console.log(props.user);
   return (
     <div className = "homePage">
 		<div className = "homeContainer">

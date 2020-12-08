@@ -81,6 +81,11 @@ class Search extends React.Component {
 	}
 	
 	submitJoin(eventid, title) {
+		if(this.props.user == undefined) {
+			window.alert("Please login or register to join the event");
+			return;
+		}
+		
 		console.log("Joining...");
 		console.log(eventid, title);
 		

@@ -1,6 +1,5 @@
 import React from "react";
 import {Link, Redirect} from 'react-router-dom';
-import {connect} from 'react-redux';
 
 class Register extends React.Component {
 	constructor(props) {
@@ -131,9 +130,4 @@ class Register extends React.Component {
 	}
 }
 
-const register = data => ({
-	type: "LOAD_USER",
-	user: data
-})
-
-export default connect(null, {register})(Register);
+export default Register;

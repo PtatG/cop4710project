@@ -7,10 +7,40 @@ function Nav(props) {
 		color: 'white'
 	};
 	
-	return <UserLink user={props.user} />
+	if(props.user == undefined)
+		return <GuestLinks />
+	else if(props.user.level == 2)
+		return <SuperLinks logout={props.logout}/>
+		
+	return <UserLinks  logout={props.logout}/>
 }
 
-function UserLink(props) {
+function UserLinks(props) {
+	const navStyle = {
+		color: 'white'
+	};
+	
+	return (
+		<nav className="navClass">
+			<ul className="nav-links">
+				<Link style={navStyle} to="/">
+					<li>Home</li>
+				</Link>
+				<Link style={navStyle} to="/host">
+					<li>Host</li>
+				</Link>
+				<Link style={navStyle} to="/search">
+					<li>Search</li>
+				</Link>
+				<a onClick={props.logout} href="#!">
+					<li>Logout</li>
+				</a>
+			</ul>
+		</nav>
+	)
+}
+
+function SuperLinks(props) {
 	const navStyle = {
 		color: 'white'
 	};
@@ -30,6 +60,28 @@ function UserLink(props) {
 				<Link style={navStyle} to="/search">
 					<li>Search</li>
 				</Link>
+				<a onClick={props.logout} href="#!">
+					<li>Logout</li>
+				</a>
+			</ul>
+		</nav>
+	)
+}
+
+function GuestLinks(props) {
+	const navStyle = {
+		color: 'white'
+	};
+	
+	return (
+		<nav className="navClass">
+			<ul className="nav-links">
+				<Link style={navStyle} to="/">
+					<li>Home</li>
+				</Link>
+				<Link style={navStyle} to="/search">
+					<li>Search</li>
+				</Link>
 				<Link style={navStyle} to="/login">
 					<li>Login</li>
 				</Link>
@@ -45,4 +97,10 @@ const mapState = state => ({
 	user: state.user
 })
 
-export default connect(mapState)(Nav);
+const logout = () => {
+	if(window.confirm("Are you sure you want to logout?"))
+		return {type: "LOGOUT"}
+	return {type: ""}
+}
+
+export default connect(mapState, {logout})(Nav);
