@@ -96,32 +96,28 @@ class Lookup extends React.Component {
 		if (this.state.results != null)
 		{
 			temp.push(
-				<div>
-					<tbody>
-						<tr>
-							<td>
-								Username
-							</td>
-						</tr>
-					</tbody>
-				</div>
+				<tbody>
+					<tr>
+						<td style={{borderBottom:"2px solid black"}}>
+							<p style={{fontWeight:"bold"}}>Username</p>
+						</td>
+					</tr>
+				</tbody>
 			)
 			for (var i = 0; i < this.state.results.length; i++)
 			{
 				temp.push(
-					<div>
-						<tbody key={i}>
-							<tr id={i} key={i}>
-								<td>
-									{this.state.results[i].username}
-								</td>
-							</tr>
-						</tbody>
-					</div>
+					<tbody key={i}>
+						<tr id={i} key={i}>
+							<td>
+								{this.state.results[i].username}
+							</td>
+						</tr>
+					</tbody>
 				)
 			}
 			sresult.push(
-				<table className="resultsTable">
+				<table className="resultsTable" style={{width:"200px"}}>
 					{temp}
 				</table>
 			)

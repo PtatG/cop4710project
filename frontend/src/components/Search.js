@@ -127,46 +127,43 @@ class Search extends React.Component {
 		if (this.state.results.length != 0)
 		{
 			temp.push(
-				<div className="inline">
-					<tbody>
+					<thead style={{fontWeight:"bold"}}>
 						<tr>
 							<td>
-								Title |
+								Title
 							</td>
 							<td>
-								City |
+								City
 							</td>
 							<td>
-								Start Date |
+								Start Date
 							</td>
 							<td>
-								End Date |
+								End Date
 							</td>
 							<td>
 								Description
 							</td>
 						</tr>
-					</tbody>
-				</div>
+					</thead>
 			)
 			for (var i = 0; i < this.state.results.length; i++)
 			{
 				result = this.state.results[i];
 				temp.push(
-					<div className="inline">
 						<tbody key={i}>
 							<tr id={i} key={i}>
 								<td>
-									{result.title} |
+									{result.title}
 								</td>
 								<td>
-									{result.city} |
+									{result.city}
 								</td>
 								<td>
-									{result.startdate.substring(0,10)} |
+									{result.startdate.substring(0,10)}
 								</td>
 								<td>
-									{result.enddate.substring(0,10)} |
+									{result.enddate.substring(0,10)}
 								</td>
 								<td>
 									{result.description}
@@ -178,7 +175,6 @@ class Search extends React.Component {
 								</button>
 							</tr>
 						</tbody>
-					</div>
 				)
 			}
 			sresult.push(
@@ -192,47 +188,49 @@ class Search extends React.Component {
 				<div>
 					<div className="container">
 						<h4>Event Search</h4>
-						<form onSubmit={this.submitForm}>
-							<input
-							 id="cityname"
-							 name="cityname"
-							 autoComplete="off"
-							 placeholder="City Name"
-							 onChange={this.changeForm}
-							 value={formdata.cityname}
-							/>
-							<div>
-								<button
-								 type="button"
-								 type="submit">
-									Search by City
-								</button>
-							</div>
-						</form>
-						<form onSubmit={this.submitFormDate}>
-							<h1>Start Date</h1>
-							<input type="date"
-							 id="startdate"
-							 name="startdate"
-							 className="inline"
-							 onChange={this.changeForm}
-							/>
-							<h1>End Date</h1>
-							<input type="date"
-							 id="enddate"
-							 name="enddate"
-							 className="inline"
-							 onChange={this.changeForm}
-							/>
-							<div>
-								<button
-								 type="button"
-								 type="submit">
-									Search by Date
-								</button>
-							</div>
-						</form>
-						<p id="search-err" className="errorReturn"></p>
+						<div style={{width:"500px",margin:"auto"}}>
+							<form onSubmit={this.submitForm}>
+								<input
+								 id="cityname"
+								 name="cityname"
+								 autoComplete="off"
+								 placeholder="City Name"
+								 onChange={this.changeForm}
+								 value={formdata.cityname}
+								/>
+								<div>
+									<button
+									 type="button"
+									 type="submit">
+										Search by City
+									</button>
+								</div>
+							</form>
+							<form onSubmit={this.submitFormDate}>
+								<h1>Start Date</h1>
+								<input type="date"
+								 id="startdate"
+								 name="startdate"
+								 className="inline"
+								 onChange={this.changeForm}
+								/>
+								<h1>End Date</h1>
+								<input type="date"
+								 id="enddate"
+								 name="enddate"
+								 className="inline"
+								 onChange={this.changeForm}
+								/>
+								<div>
+									<button
+									 type="button"
+									 type="submit">
+										Search by Date
+									</button>
+								</div>
+							</form>
+							<p id="search-err" className="errorReturn"></p>
+						</div>
 						{sresult}
 					</div>
 				</div>

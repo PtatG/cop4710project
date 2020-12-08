@@ -1,10 +1,11 @@
 .container {
   margin: 0 auto;
-  width: 500px;
+  width: 600px;
   /*display: inline-block;*/
   justify-content: space-around;
   position: relative;
-  top: 1rem
+  top: 1rem;
+  text-align: center
 }
 
 .scontainer {
