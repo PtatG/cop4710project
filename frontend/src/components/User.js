@@ -21,6 +21,8 @@ class Search extends React.Component {
 			}
 		`
 		
+		console.log(jsonPayload);
+		
 		const {formdata} = this.state;
 		fetch('http://127.0.0.1:8080/listSelfEvents/', {
 			method: 'POST',

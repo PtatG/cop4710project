@@ -115,7 +115,7 @@ class Lookup extends React.Component {
 		}).then(response => {
 			var elem = document.getElementById("search-err");
 			elem.innerHTML = response.message;
-			console.log('Success:', response.titles);
+			console.log('Success:', response);
 			this.setState({ eresults: response.titles || []});
 			setTimeout(() => {
 				elem.innerHTML = "";
@@ -147,7 +147,7 @@ class Lookup extends React.Component {
 		}).then(response => {
 			var elem = document.getElementById("search-err");
 			elem.innerHTML = response.message;
-			console.log('Success:', response.events);
+			console.log('Success:', response);
 			this.setState({ eresults: response.events || []});
 			setTimeout(() => {
 				elem.innerHTML = "";
@@ -162,6 +162,7 @@ class Lookup extends React.Component {
 		const temp = []
 		const temp2 = []
 		const temp3 = []
+		var rresult
 		var result
 		
 		if (this.state.results != null)
@@ -177,21 +178,21 @@ class Lookup extends React.Component {
 			)
 			for (var i = 0; i < this.state.results.length; i++)
 			{
-				result = this.state.results[i];
+				rresult = this.state.results[i];
 				temp.push(
 					<tbody key={i}>
 						<tr id={i} key={i}>
 							<td>
-								{result.username}
+								{rresult.username}
 							</td>
 							<button
 							 type="button"
-							 onClick={() => this.submitAdminEvents(result.id)}>
+							 onClick={() => this.submitAdminEvents(rresult.id)}>
 								Hosted Events
 							</button>
 							<button
 							 type="button"
-							 onClick={() => this.submitUserEvents(result.id)}>
+							 onClick={() => this.submitUserEvents(rresult.id)}>
 								Joined Events
 							</button>
 						</tr>
@@ -206,6 +207,7 @@ class Lookup extends React.Component {
 		}
 		if (this.state.eresults != null)
 		{
+			result = this.state.eresults[i];
 			temp2.push(
 				<tbody>
 					<tr>
@@ -215,7 +217,7 @@ class Lookup extends React.Component {
 					</tr>
 				</tbody>
 			)
-			for (var i = 0; i < this.state.results.length; i++)
+			for (var i = 0; i < this.state.eresults.length; i++)
 			{
 				temp2.push(
 					<tbody key={i}>
