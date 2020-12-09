@@ -481,6 +481,11 @@ exports.joinEvent = (req, res) => {
 
 	Event.joinEvent(participants, (err, data) => {
 		if (err) {
+			if (err.errno == 1062) {
+				return res.status(400).json({
+					message: "Error: Already joined this event."
+				});
+			}
 			return res.status(500).json({
 				message: "Error: Couldn't join event."
 			});
