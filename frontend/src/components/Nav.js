@@ -32,6 +32,9 @@ function UserLinks(props) {
 				<Link style={navStyle} to="/search">
 					<li>Search</li>
 				</Link>
+				<Link style={navStyle} to="/user">
+					<li>My Events</li>
+				</Link>
 				<a onClick={props.logout} href="#!">
 					<li>Logout</li>
 				</a>
@@ -59,6 +62,9 @@ function SuperLinks(props) {
 				</Link>
 				<Link style={navStyle} to="/search">
 					<li>Search</li>
+				</Link>
+				<Link style={navStyle} to="/user">
+					<li>My Events</li>
 				</Link>
 				<a onClick={props.logout} href="#!">
 					<li>Logout</li>

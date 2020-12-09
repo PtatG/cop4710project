@@ -8,12 +8,15 @@ class Lookup extends React.Component {
 		this.state = {
 			formdata: {
 				adminname: "",
-				results: ""
+				results: "",
+				eresults: ""
 			}
 		}
 		this.changeForm = this.changeForm.bind(this);
 		this.submitUsers = this.submitUsers.bind(this);
 		this.submitAdmins = this.submitAdmins.bind(this);
+		this.submitUserEvents = this.submitUserEvents.bind(this);
+		this.submitAdminEvents = this.submitAdminEvents.bind(this);
 	}
 	
 	changeForm(e) {
@@ -87,18 +90,86 @@ class Lookup extends React.Component {
 		e.preventDefault();
 	}
 	
+	submitUserEvents(userid) {
+		console.log("Submitting...");
+		console.log(this.state.formdata)
+		
+		var jsonPayload = `
+			{
+				"token" : "${this.props.user.token}",
+				"id" : "${userid}"
+			}
+		`
+		
+		console.log(jsonPayload);
+		
+		fetch('http://127.0.0.1:8080/userEvents/', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: jsonPayload,
+		}).then(res => {
+			console.log(res)
+			return res.json()
+		}).then(response => {
+			var elem = document.getElementById("search-err");
+			elem.innerHTML = response.message;
+			console.log('Success:', response.titles);
+			this.setState({ eresults: response.titles || []});
+			setTimeout(() => {
+				elem.innerHTML = "";
+			}, 5000)
+		});
+	}
+	
+	submitAdminEvents(userid) {
+		console.log("Submitting...");
+		console.log(this.state.formdata)
+		
+		var jsonPayload = `
+			{
+				"token" : "${this.props.user.token}",
+				"id" : "${userid}"
+			}
+		`
+		console.log(jsonPayload);
+		
+		fetch('http://127.0.0.1:8080/adminEvents/', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: jsonPayload,
+		}).then(res => {
+			console.log(res)
+			return res.json()
+		}).then(response => {
+			var elem = document.getElementById("search-err");
+			elem.innerHTML = response.message;
+			console.log('Success:', response.events);
+			this.setState({ eresults: response.events || []});
+			setTimeout(() => {
+				elem.innerHTML = "";
+			}, 5000)
+		});
+	}
+	
 	render() {
 		const {formdata} = this.state;
 		
 		const sresult = []
 		const temp = []
+		const temp2 = []
+		const temp3 = []
+		var result
 		
 		if (this.state.results != null)
 		{
 			temp.push(
 				<tbody>
 					<tr>
-						<td style={{borderBottom:"2px solid black"}}>
+						<td key="-1" style={{borderBottom:"2px solid black"}}>
 							<p style={{fontWeight:"bold"}}>Username</p>
 						</td>
 					</tr>
@@ -106,12 +177,23 @@ class Lookup extends React.Component {
 			)
 			for (var i = 0; i < this.state.results.length; i++)
 			{
+				result = this.state.results[i];
 				temp.push(
 					<tbody key={i}>
 						<tr id={i} key={i}>
 							<td>
-								{this.state.results[i].username}
+								{result.username}
 							</td>
+							<button
+							 type="button"
+							 onClick={() => this.submitAdminEvents(result.id)}>
+								Hosted Events
+							</button>
+							<button
+							 type="button"
+							 onClick={() => this.submitUserEvents(result.id)}>
+								Joined Events
+							</button>
 						</tr>
 					</tbody>
 				)
@@ -119,6 +201,35 @@ class Lookup extends React.Component {
 			sresult.push(
 				<table className="resultsTable" style={{width:"200px"}}>
 					{temp}
+				</table>
+			)
+		}
+		if (this.state.eresults != null)
+		{
+			temp2.push(
+				<tbody>
+					<tr>
+						<td key="-1" style={{borderBottom:"2px solid black"}}>
+							<p style={{fontWeight:"bold"}}>Title</p>
+						</td>
+					</tr>
+				</tbody>
+			)
+			for (var i = 0; i < this.state.results.length; i++)
+			{
+				temp2.push(
+					<tbody key={i}>
+						<tr id={i} key={i}>
+							<td>
+								{this.state.eresults[i].title}
+							</td>
+						</tr>
+					</tbody>
+				)
+			}
+			temp3.push(
+				<table className="resultsTable" style={{width:"200px"}}>
+					{temp2}
 				</table>
 			)
 		}
@@ -139,6 +250,9 @@ class Lookup extends React.Component {
 				</div>
 				<div className="container">
 					{sresult}
+				</div>
+				<div className="container">
+					{temp3}
 				</div>
 			</div>
 		)

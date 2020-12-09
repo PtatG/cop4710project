@@ -128,7 +128,7 @@ class Search extends React.Component {
 		{
 			temp.push(
 					<thead style={{fontWeight:"bold"}}>
-						<tr>
+						<tr key="-1">
 							<td>
 								Title
 							</td>

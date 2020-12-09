@@ -13,6 +13,7 @@ import Host from './components/Host';
 import Search from './components/Search';
 import Login from './components/Login';
 import Register from './components/Register';
+import User from './components/User';
 
 import reportWebVitals from './reportWebVitals';
 import store from './store';
@@ -30,6 +31,7 @@ function Index() {
 					<Route path='/search' exact component={Search} />
 					<Route path='/login' exact component={Login} />
 					<Route path='/register' exact component={Register} />
+					<Route path='/user' exact component={User} />
 				</div>
 			</BrowserRouter>
 		</Provider>
